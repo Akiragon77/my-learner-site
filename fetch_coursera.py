@@ -26,14 +26,13 @@ def fetch_top_ai_courses():
                 "name": item.get("name"),
                 "rating": round(avg_rating, 2),
                 "review_count": rating_count,
-                # Force English locale in the URL
                 "url": f"https://www.coursera.org/learn/{slug}?lang=en"
             })
     
-    # Sort by rating (highest first) and take top 5
+    # 評価順にソートして上位5件を抽出
     top5 = sorted(courses, key=lambda x: x["rating"], reverse=True)[:5]
     
-    # Save to JSON
+    # ai_top5_courses.json のみを保存
     with open("ai_top5_courses.json", "w", encoding="utf-8") as f:
         json.dump(top5, f, ensure_ascii=False, indent=2)
 
