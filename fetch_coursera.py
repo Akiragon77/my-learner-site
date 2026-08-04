@@ -34,36 +34,43 @@ def fetch_top_ai_courses():
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
     }
     
+    # 確実に異なるデータを集めるため、APIから一覧を取得してマッピングする
+    print("Fetching courses list from Coursera API...")
+    try:
+        res = requests.get(f"{url}?limit=100&fields=name,slug", headers=headers, timeout=15)
+        res.raise_for_status()
+        all_elements = res.json().get("elements", [])
+    except Exception as e:
+        print(f"Error fetching base course list: {e}")
+        sys.exit(1)
+
+    # slug をキーにした辞書を作成
+    slug_map = {item.get("slug"): item for item in all_elements if item.get("slug")}
+
     courses = []
-    print("Fetching verified top-rated AI courses & official ratings from Coursera API...")
-    
+    print("Extracting target courses and ratings...")
+
     for slug in target_slugs:
-        try:
-            res = requests.get(f"{url}?slug={slug}&fields=name,slug,workload", headers=headers, timeout=10)
-            if res.status_code == 200:
-                data = res.json()
-                elements = data.get("elements", [])
-                if elements:
-                    item = elements[0]
-                    course_id = item.get("id")
-                    
-                    rating = get_course_rating(course_id, headers)
-                    
-                    course_data = {
-                        "id": course_id,
-                        "name": item.get("name"),
-                        "url": f"https://www.coursera.org/learn/{slug}?lang=en"
-                    }
-                    
-                    if item.get("workload"):
-                        course_data["workload"] = item.get("workload")
-                    if rating:
-                        course_data["rating"] = rating
-                        
-                    courses.append(course_data)
-                    print(f"  --> Loaded: {item.get('name')} (Rating: {rating})")
-        except Exception as e:
-            print(f"Failed to fetch {slug}: {e}")
+        item = slug_map.get(slug)
+        if item:
+            course_id = item.get("id")
+            course_name = item.get("name")
+            
+            # 公式評価の取得
+            rating = get_course_rating(course_id, headers)
+            
+            course_data = {
+                "id": course_id,
+                "name": course_name,
+                "url": f"https://www.coursera.org/learn/{slug}?lang=en"
+            }
+            if rating:
+                course_data["rating"] = rating
+                
+            courses.append(course_data)
+            print(f"  --> Loaded: {course_name} (Rating: {rating})")
+        else:
+            print(f"  --> Warning: Slug '{slug}' not found in API response.")
 
     print(f"Successfully retrieved {len(courses)} courses.")
 

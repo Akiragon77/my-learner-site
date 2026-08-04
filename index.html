@@ -400,9 +400,9 @@
       courses.forEach((course, index) => {
         const rank = index + 1;
         
-        // workload（講義時間）が存在する場合のみHTML要素を生成
-        const metaWorkload = course.workload 
-          ? `<span class="meta-item">⏱ ${course.workload}</span>` 
+        // 評価（rating）が存在する場合のみ表示
+        const metaRating = course.rating 
+          ? `<span class="rating" style="color: #f39c12; font-weight: bold;"><span class="star">★</span> ${course.rating}</span>` 
           : '';
 
         html += `
@@ -412,7 +412,7 @@
               <h3 class="title">${course.name}</h3>
             </div>
             <div class="meta-container" style="margin: 10px 0; display: flex; gap: 15px; font-size: 0.9rem; color: #555; align-items: center;">
-              ${metaWorkload}
+              ${metaRating}
               <span class="meta-item">🏛 Coursera</span>
             </div>
             <div class="btn-container">
