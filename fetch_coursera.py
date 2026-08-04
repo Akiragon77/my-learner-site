@@ -1,8 +1,8 @@
 import requests
 import json
+import sys
 
 def fetch_top_ai_courses():
-    # Coursera公式の検索API
     url = "https://api.coursera.org/api/courses.v1"
     
     params = {
@@ -11,12 +11,23 @@ def fetch_top_ai_courses():
         "limit": 20
     }
     
+    # APIブロックを回避するため、一般的なブラウザのUser-Agentを設定
+    headers = {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+    }
+    
     print("Fetching real-time data from Coursera API...")
-    response = requests.get(url, params=params, timeout=10)
-    data = response.json()
+    try:
+        response = requests.get(url, params=params, headers=headers, timeout=15)
+        response.raise_for_status()
+        data = response.json()
+    except Exception as e:
+        print(f"Error fetching data from Coursera API: {e}")
+        # API取得失敗時に空のファイルで上書きして事故るのを防ぐ
+        sys.exit(1)
     
     elements = data.get("elements", [])
-    print(f"API returned {len(elements)} courses.")
+    print(f"API returned {len(elements)} raw elements.")
 
     courses = []
     for item in elements:
@@ -25,15 +36,19 @@ def fetch_top_ai_courses():
         course_id = item.get("id")
         
         if name and slug:
-            # 安定してアクセスできる英語の受講URLを生成
             courses.append({
                 "id": course_id,
                 "name": name,
                 "url": f"https://www.coursera.org/learn/{slug}?lang=en"
             })
 
-    # 取得した結果から最新の上位5件を抽出
     top5 = courses[:5]
+    print(f"Extracted Top 5 courses: {top5}")
+
+    # 万が一抽出結果が0件だった場合はエラー終了にして空ファイルの保存を防ぐ
+    if not top5:
+        print("Error: No valid courses were extracted from the response.")
+        sys.exit(1)
 
     # JSONファイルへの書き込み
     with open("ai_top5_courses.json", "w", encoding="utf-8") as f:
