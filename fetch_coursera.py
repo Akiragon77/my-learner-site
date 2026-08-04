@@ -3,102 +3,98 @@ import json
 import sys
 
 def get_course_rating(course_id, headers):
-    """
-    Courseraの評価専用API (courseRatings.v2) から公式の平均評価を取得
-    """
+    """Courseraの評価専用API (courseRatings.v2) から公式の平均評価(数値)を取得"""
     rating_url = f"https://api.coursera.org/api/courseRatings.v2?q=course&courseId={course_id}"
     try:
-        res = requests.get(rating_url, headers=headers, timeout=10)
+        res = requests.get(rating_url, headers=headers, timeout=5)
         if res.status_code == 200:
             data = res.json()
             elements = data.get("elements", [])
             if elements:
                 avg_rating = elements[0].get("averageRating")
-                if avg_rating:
-                    return f"{avg_rating:.1f}"
-    except Exception as e:
-        print(f"      Failed to fetch rating for {course_id}: {e}")
-    
+                if avg_rating is not None:
+                    return float(avg_rating)
+    except Exception:
+        pass
     return None
 
 def fetch_top_ai_courses():
     url = "https://api.coursera.org/api/courses.v1"
-    
-    # 対象コースのslugリスト
-    target_slugs = [
-        "ai-for-everyone",
-        "machine-learning",
-        "neural-networks-deep-learning",
-        "generative-ai-for-everyone",
-        "introduction-to-ai"
-    ]
-    
     headers = {
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
     }
+
+    print("Fetching AI courses list from Coursera API...")
     
-    print("Fetching verified top-rated AI courses & official ratings from Coursera API...")
-    
-    # slugをカンマ区切りで指定して一括取得
-    slugs_param = ",".join(target_slugs)
-    request_url = f"{url}?q=slugs&slugs={slugs_param}&fields=name,slug,workload"
-    
-    courses_map = {}
-    
+    # AIに関連する検索クエリでAPIを呼び出す
     try:
-        res = requests.get(request_url, headers=headers, timeout=10)
-        if res.status_code == 200:
-            data = res.json()
-            elements = data.get("elements", [])
-            for item in elements:
-                item_slug = item.get("slug")
-                if item_slug in target_slugs:
-                    courses_map[item_slug] = item
-        else:
-            print(f"API Request failed with status code: {res.status_code}")
+        res = requests.get(f"{url}?q=search&query=Artificial%20Intelligence&limit=50&fields=name,slug", headers=headers, timeout=15)
+        if res.status_code != 200:
+            # searchクエリが使えない場合のフォールバック（一覧取得）
+            res = requests.get(f"{url}?limit=100&fields=name,slug", headers=headers, timeout=15)
+        
+        res.raise_for_status()
+        all_courses = res.json().get("elements", [])
     except Exception as e:
-        print(f"Failed to fetch course list: {e}")
-
-    courses = []
-    
-    # 元の target_slugs の順序を保持して処理
-    for slug in target_slugs:
-        item = courses_map.get(slug)
-        if not item:
-            print(f"  --> Warning: Could not find course data for slug: {slug}")
-            continue
-            
-        course_id = item.get("id")
-        course_name = item.get("name")
-        
-        # 評価を取得
-        rating = get_course_rating(course_id, headers)
-        
-        course_data = {
-            "id": course_id,
-            "name": course_name,
-            "url": f"https://www.coursera.org/learn/{slug}?lang=en"
-        }
-        
-        if item.get("workload"):
-            course_data["workload"] = item.get("workload")
-        if rating:
-            course_data["rating"] = rating
-            
-        courses.append(course_data)
-        print(f"  --> Loaded: {course_name} (Rating: {rating})")
-
-    print(f"Successfully retrieved {len(courses)} courses with official ratings.")
-
-    if not courses:
-        print("Error: Could not retrieve course data.")
+        print(f"Failed to fetch courses: {e}")
         sys.exit(1)
 
-    # JSONファイルへの保存
-    with open("ai_top5_courses.json", "w", encoding="utf-8") as f:
-        json.dump(courses, f, ensure_ascii=False, indent=2)
+    print(f"Retrieved {len(all_courses)} candidate courses. Evaluating ratings...")
 
-    print("Saved to ai_top5_courses.json!")
+    ai_keywords = ["ai", "artificial intelligence", "machine learning", "deep learning", "generative ai"]
+    evaluated_courses = []
+    seen_names = set()
+
+    # 取得したコースを1件ずつ検証
+    for course in all_courses:
+        course_id = course.get("id")
+        name = course.get("name", "")
+        slug = course.get("slug", "")
+        name_lower = name.lower()
+
+        # 重複チェック ＆ AIキーワードが含まれているか判定
+        if name_lower in seen_names:
+            continue
+        if not any(kw in name_lower for kw in ai_keywords):
+            continue
+
+        # 評価（Rating）を取得
+        rating = get_course_rating(course_id, headers)
+        
+        # 評価が取得でき、かつ高評価（4.0以上）のものだけエントリー
+        if rating and rating >= 4.0:
+            seen_names.add(name_lower)
+            evaluated_courses.append({
+                "id": course_id,
+                "name": name,
+                "rating_val": rating,
+                "rating": f"{rating:.1f}",
+                "url": f"https://www.coursera.org/learn/{slug}?lang=en"
+            })
+            print(f"  [Match] {name} (Rating: {rating:.1f})")
+
+    # 評価（rating_val）が高い順にソート（並び替え）
+    evaluated_courses.sort(key=lambda x: x["rating_val"], reverse=0 == 0) # 降順ソート
+    evaluated_courses.sort(key=lambda x: x["rating_val"], reverse=True)
+
+    # 上位5件を抽出
+    top5_courses = evaluated_courses[:5]
+
+    # 不要なソート用キーを削除
+    for item in top5_courses:
+        del item["rating_val"]
+
+    print(f"\nSuccessfully selected TOP {len(top5_courses)} rated AI courses.")
+
+    if not top5_courses:
+        print("Warning: No matching rated courses found.")
+        sys.exit(1)
+
+    # JSONへ書き出し
+    with open("ai_top5_courses.json", "w", encoding="utf-8") as f:
+        json.dump(top5_courses, f, ensure_ascii=False, indent=2)
+
+    print("Saved automatically generated top courses to ai_top5_courses.json!")
 
 if __name__ == "__main__":
     fetch_top_ai_courses()
