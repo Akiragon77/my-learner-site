@@ -373,19 +373,14 @@
     </div>
   </div>
 
-  <!-- Container for the AI course ranking -->
 <div id="coursera-ai-container">
   <p>Loading top-rated AI courses...</p>
 </div>
 
-<!-- JavaScript to fetch and render the JSON data -->
 <script>
-  // Fetch ai_top5_courses.json with cache-busting parameter
   fetch('./ai_top5_courses.json?v=' + new Date().getTime())
     .then(response => {
-      if (!response.ok) {
-        throw new Error('Failed to load course data');
-      }
+      if (!response.ok) throw new Error('Failed to load course data');
       return response.json();
     })
     .then(data => {
@@ -395,10 +390,8 @@
       
       data.forEach((course, index) => {
         html += `
-          <li style="margin-bottom: 16px; padding: 12px; border-bottom: 1px solid #eee;">
-            <strong>${index + 1}. <a href="${course.url}" target="_blank" rel="noopener">${course.name}</a></strong><br>
-            <span style="color: #f39c12;">★ ${course.rating.toFixed(2)}</span> 
-            <span style="color: #666; font-size: 0.9em;">(${course.review_count.toLocaleString()} reviews)</span>
+          <li style="margin-bottom: 12px; padding: 10px; border-bottom: 1px solid #eee;">
+            <strong>${index + 1}. <a href="${course.url}" target="_blank" rel="noopener">${course.name}</a></strong>
           </li>
         `;
       });
