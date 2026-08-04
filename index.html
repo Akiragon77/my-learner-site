@@ -1,3 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Udemy Ranking - Best Online Courses</title>
+  <style>
+    /* Global Styles */
+    body {
+      font-family: "Helvetica Neue", Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f8f9fa;
+      color: #333;
+      line-height: 1.6;
+    }
+
+    /* Header Styles */
+    header {
+      background-color: #ffffff;
+      border-bottom: 1px solid #eaeaea;
+      padding: 20px 0;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    .subtitle {
+      font-size: 0.9rem;
+      color: #666;
+      font-weight: 500;
+      margin-bottom: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    /* Navigation Bar */
+    nav {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 10px;
+      flex-wrap: wrap;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: #0056b3;
+      font-weight: bold;
+      padding: 6px 14px;
+      border-radius: 4px;
+      background-color: #f0f4f8;
+      transition: background-color 0.2s, color 0.2s;
+      font-size: 0.95rem;
+    }
+
+    nav a:hover {
+      background-color: #0056b3;
+      color: #ffffff;
+    }
+
+    /* Main Content Area */
+    main {
+      padding: 40px 0;
+    }
+
+    h1, h2, h3, h4 {
+      color: #1a1a1a;
+    }
+
+    .page-title {
+      font-size: 1.8rem;
+      border-bottom: 3px solid #0056b3;
+      padding-bottom: 8px;
+      margin-bottom: 30px;
+    }
+
+    .section {
+      background: #ffffff;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+      margin-bottom: 30px;
+    }
+
+    h2 {
+      font-size: 1.3rem;
+      margin-top: 0;
+      margin-bottom: 20px;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 10px;
+      color: #0056b3;
+    }
+
+    /* Enhanced Course Card Styles */
+    .course-card {
+      position: relative;
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 24px;
+      margin-bottom: 24px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.03);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .course-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
+      border-color: #cbd5e1;
+    }
+
+    .course-header {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .rank-badge {
+      background-color: #0056b3;
+      color: #ffffff;
+      font-weight: bold;
+      font-size: 0.9rem;
+      padding: 4px 10px;
+      border-radius: 6px;
+      flex-shrink: 0;
+    }
+
+    .title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #1e293b;
+      line-height: 1.4;
+      margin: 0;
+    }
+
+    .meta-container {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 15px;
+      margin: 12px 0 18px 0;
+      font-size: 0.9rem;
+      color: #475569;
+    }
+
+    .rating {
+      color: #b45309;
+      background-color: #fef3c7;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-weight: bold;
+    }
+
+    .star {
+      color: #f59e0b;
+    }
+
+    .meta-item {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .btn-container {
+      margin-top: auto;
+      text-align: right;
+    }
+
+    .btn-detail {
+      display: inline-block;
+      background-color: #0056b3;
+      color: #ffffff;
+      font-weight: bold;
+      font-size: 0.95rem;
+      padding: 10px 20px;
+      border-radius: 6px;
+      text-decoration: none;
+      transition: background-color 0.2s;
+    }
+
+    .btn-detail:hover {
+      background-color: #003d82;
+      text-decoration: none;
+    }
+
+    /* Footer Styles */
+    footer {
+      margin-top: 50px;
+      padding: 20px 0;
+      border-top: 1px solid #eaeaea;
+      color: #777;
+      font-size: 0.9rem;
+      text-align: center;
+    }
+  </style>
+  <meta name='impact-site-verification' value='ee5b91d5-5c90-4f05-bb99-16c24b627bc8'>
+</head>
+<body>
+
+  <!-- Header Area -->
+  <header>
+    <div class="container">
+      <div class="subtitle">
+        Course Rankings
+      </div>
+      <nav>
+        <a href="index.html">Home</a>
+        <a href="online.html">Online Courses</a>
+        <a href="Udemy.html">About Udemy</a>
+        <a href="Coursera.html">About Coursera</a>
+        <a href="Edx.html">About edX</a>
+        <a href="Trending Topics.html">Trending Topics</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main Content Area -->
+  <main class="container">
+    <h1 class="page-title">Ranking</h1>
+
+    <!-- Ranking Section -->
+    <section class="section">
+      <h2>Top-Rated Udemy Courses</h2>
+
+      <!-- Course #1 -->
+      <div class="course-card">
+        <div class="course-header">
+          <span class="rank-badge">#1</span>
+          <h3 class="title">AI Engineer Core Track: LLM Engineering, RAG, QLoRA, Agents</h3>
+        </div>
+        <div class="meta-container">
+          <span class="rating"><span class="star">★</span> 4.6</span>
+          <span class="meta-item">👥 320,657 Students</span>
+          <span class="meta-item">⏱ 6 Hours</span>
+        </div>
+        <div class="btn-container">
+          <a href="https://www.udemy.com/course/llm-engineering-master-ai-and-large-language-models/?couponCode=MT260803JP" class="btn-detail" target="_blank" rel="noopener noreferrer">View Details →</a>
+        </div>
+      </div>
+
+      <!-- Course #2 -->
+      <div class="course-card">
+        <div class="course-header">
+          <span class="rank-badge">#2</span>
+          <h3 class="title">The AI Engineer Course 2026: Complete AI Engineer Bootcamp</h3>
+        </div>
+        <div class="meta-container">
+          <span class="rating"><span class="star">★</span> 4.5</span>
+          <span class="meta-item">👥 188,168 Students</span>
+          <span class="meta-item">⏱ 29 Hours</span>
+        </div>
+        <div class="btn-container">
+          <a href="https://www.udemy.com/course/the-ai-engineer-course-complete-ai-engineer-bootcamp/?couponCode=MT260803JP" class="btn-detail" target="_blank" rel="noopener noreferrer">View Details →</a>
+        </div>
+      </div>
+
+      <!-- Course #3 -->
+      <div class="course-card">
+        <div class="course-header">
+          <span class="rank-badge">#3</span>
+          <h3 class="title">Intro to AI: A Beginner's Guide to Artificial Intelligence</h3>
+        </div>
+        <div class="meta-container">
+          <span class="rating"><span class="star">★</span> 4.5</span>
+          <span class="meta-item">👥 93,404 Students</span>
+          <span class="meta-item">⏱ 2.5 Hours</span>
+        </div>
+        <div class="btn-container">
+          <a href="https://www.udemy.com/course/intro-to-ai-a-beginners-guide-to-artificial-intelligence/?couponCode=MT260803JP" class="btn-detail" target="_blank" rel="noopener noreferrer">View Details →</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Coursera Section -->
+<section class="section">
+  <h2>Top-Rated Coursera Courses</h2>
+
+  <!-- Coursera Course #1 -->
+  <div class="course-card">
+    <div class="course-header">
+      <span class="rank-badge" style="background-color: #0056b3;">#1</span>
+      <h3 class="title">Google Data Analytics Professional Certificate</h3>
+    </div>
+    <div class="meta-container">
+      <span class="rating"><span class="star">★</span> 4.8</span>
+      <span class="meta-item">👥 2,100,000+ Students</span>
+      <span class="meta-item">⏱ Approx. 6 Months</span>
+      <span class="meta-item">🏛 Google</span>
+    </div>
+    <div class="btn-container">
+      <a href="https://www.coursera.org/professional-certificates/google-data-analytics" class="btn-detail" target="_blank" rel="noopener noreferrer">View Details →</a>
+    </div>
+  </div>
+
+  <!-- Coursera Course #2 -->
+  <div class="course-card">
+    <div class="course-header">
+      <span class="rank-badge" style="background-color: #0056b3;">#2</span>
+      <h3 class="title">AI For Everyone (by Andrew Ng)</h3>
+    </div>
+    <div class="meta-container">
+      <span class="rating"><span class="star">★</span> 4.8</span>
+      <span class="meta-item">👥 1,100,000+ Students</span>
+      <span class="meta-item">⏱ 12 Hours</span>
+      <span class="meta-item">🏛 DeepLearning.AI</span>
+    </div>
+    <div class="btn-container">
+      <a href="https://www.coursera.org/learn/ai-for-everyone" class="btn-detail" target="_blank" rel="noopener noreferrer">View Details →</a>
+    </div>
+  </div>
+
+  <!-- Coursera Course #3 -->
+  <div class="course-card">
+    <div class="course-header">
+      <span class="rank-badge" style="background-color: #0056b3;">#3</span>
+      <h3 class="title">Supervised Machine Learning: Regression and Classification</h3>
+    </div>
+    <div class="meta-container">
+      <span class="rating"><span class="star">★</span> 4.9</span>
+      <span class="meta-item">👥 850,000+ Students</span>
+      <span class="meta-item">⏱ 33 Hours</span>
+      <span class="meta-item">🏛 Stanford University & DeepLearning.AI</span>
+    </div>
+    <div class="btn-container">
+      <a href="https://www.coursera.org/learn/machine-learning" class="btn-detail" target="_blank" rel="noopener noreferrer">View Details →</a>
+    </div>
+  </div>
+</section>
+
+<!-- edX Section -->
+<section class="section">
+  <h2>Top-Rated edX Courses</h2>
+
+  <!-- edX Course #1 -->
+  <div class="course-card">
+    <div class="course-header">
+      <span class="rank-badge" style="background-color: #0056b3;">#1</span>
+      <h3 class="title">CS50's Introduction to Computer Science</h3>
+    </div>
+    <div class="meta-container">
+      <span class="rating"><span class="star">★</span> 4.9</span>
+      <span class="meta-item">👥 5,700,000+ Students</span>
+      <span class="meta-item">⏱ 12 Weeks (6-18 hrs/wk)</span>
+      <span class="meta-item">🏛 Harvard University</span>
+    </div>
+    <div class="btn-container">
+      <a href="https://www.edx.org/learn/computer-science/harvard-university-cs50-s-introduction-to-computer-science" class="btn-detail" target="_blank" rel="noopener noreferrer">View Details →</a>
+    </div>
+  </div>
+
+
+  <!-- edX Course #2 -->
+  <div class="course-card">
+    <div class="course-header">
+      <span class="rank-badge" style="background-color: #0056b3;">#2</span>
+      <h3 class="title">Data Science: R Basics</h3>
+    </div>
+    <div class="meta-container">
+      <span class="rating"><span class="star">★</span> 4.8</span>
+      <span class="meta-item">👥 950,000+ Students</span>
+      <span class="meta-item">⏱ 8 Weeks (1-2 hrs/wk)</span>
+      <span class="meta-item">🏛 Harvard University</span>
+    </div>
+    <div class="btn-container">
+      <a href="https://www.edx.org/learn/r-programming/harvard-university-data-science-r-basics" class="btn-detail" target="_blank" rel="noopener noreferrer">View Details →</a>
+    </div>
+  </div>
 <!-- Coursera Section -->
 <section class="section">
   <h2>Top-Rated Coursera Courses</h2>
@@ -55,3 +429,19 @@
       document.getElementById('coursera-course-list').innerHTML = '<p>Unable to load top courses at this time.</p>';
     });
 </script>
+</section>
+
+  </main>
+
+<!-- Footer Area -->
+  <footer>
+    <div class="container">
+      <p style="margin: 0 0 8px 0;">© 2026 Udemy Ranking</p>
+      <div style="font-size: 0.85rem;">
+        <a href="pp.html" style="color: #666; text-decoration: none; margin: 0 8px;">Privacy Policy</a> | 
+        <a href="contact.html" style="color: #666; text-decoration: none; margin: 0 8px;">Contact Us</a>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>
