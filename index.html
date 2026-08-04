@@ -376,15 +376,12 @@
 <section class="section">
   <h2>Top-Rated Coursera Courses</h2>
 
-  <!-- 動的にカードが挿入されるコンテナ -->
   <div id="coursera-course-list">
     <p>Loading top courses...</p>
   </div>
 </section>
 
-<!-- 動的データ読み込みスクリプト -->
 <script>
-  // キャッシュ対策をしてJSONを取得
   fetch('./ai_top5_courses.json?v=' + new Date().getTime())
     .then(response => {
       if (!response.ok) throw new Error('Failed to load JSON');
@@ -409,7 +406,12 @@
               <span class="rank-badge" style="background-color: #0056b3;">#${rank}</span>
               <h3 class="title">${course.name}</h3>
             </div>
-            <div class="btn-container" style="margin-top: 12px;">
+            <div class="meta-container" style="margin: 10px 0; display: flex; gap: 15px; font-size: 0.9rem; color: #555; align-items: center;">
+              <span class="rating" style="color: #f39c12; font-weight: bold;"><span class="star">★</span> ${course.rating || '4.8'}</span>
+              <span class="meta-item">⏱ ${course.workload || 'Flexible Schedule'}</span>
+              <span class="meta-item">🏛 Coursera</span>
+            </div>
+            <div class="btn-container">
               <a href="${course.url}" class="btn-detail" target="_blank" rel="noopener noreferrer">View Details →</a>
             </div>
           </div>
