@@ -376,12 +376,15 @@
 <section class="section">
   <h2>Top-Rated Coursera Courses</h2>
 
+  <!-- 動的にカードが挿入されるコンテナ -->
   <div id="coursera-course-list">
     <p>Loading top courses...</p>
   </div>
 </section>
 
+<!-- 動的データ読み込みスクリプト -->
 <script>
+  // キャッシュ対策をしてJSONを取得
   fetch('./ai_top5_courses.json?v=' + new Date().getTime())
     .then(response => {
       if (!response.ok) throw new Error('Failed to load JSON');
@@ -400,7 +403,7 @@
       courses.forEach((course, index) => {
         const rank = index + 1;
         
-        // 評価（rating）が存在する場合のみ表示
+        // 評価（rating）がJSONに含まれている場合のみ★マーク付きで表示
         const metaRating = course.rating 
           ? `<span class="rating" style="color: #f39c12; font-weight: bold;"><span class="star">★</span> ${course.rating}</span>` 
           : '';
